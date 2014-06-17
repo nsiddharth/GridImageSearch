@@ -1,15 +1,19 @@
 package codepath.example.gridimagesearch;
 
+import java.io.Serializable;
 import java.util.ArrayList;
-
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class ImageResult {
+public class ImageResult implements Serializable {
 	
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -887495470941507260L;
 	private String fullUrl; 
 	private String thumbUrl;
 
