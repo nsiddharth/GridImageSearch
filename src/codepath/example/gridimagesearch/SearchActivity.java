@@ -28,7 +28,7 @@ public class SearchActivity extends Activity {
 	private EditText etSearch;
 	private GridView gvImages;
 	private Button btnSearch;
-	ArrayList<ImageResult> imageList = new ArrayList<ImageResult>();
+	ArrayList<ImageResult> imageList;
 	ImageResultArrayAdapter imageAdapter ;
 
 	@Override
@@ -36,6 +36,7 @@ public class SearchActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_search);
 		setUpViews();
+		imageList = new ArrayList<ImageResult>();
 		imageAdapter = new ImageResultArrayAdapter(this, imageList);
 		gvImages.setAdapter(imageAdapter);
 		gvImages.setOnItemClickListener(new OnItemClickListener() {
@@ -94,11 +95,9 @@ String searchTerm = etSearch.getText().toString();
 				try{
 					
 					imageJsonResults=response.getJSONObject("responseData").getJSONArray("results");
-					imageList.clear();
+					//imageList.clear();
 					imageList.addAll(ImageResult.fromJSONArray(imageJsonResults));
-					imageAdapter.addAll(imageList);
-					//imageAdapter.addAll(imageList);
-					
+					imageAdapter.addAll(imageList);	
 					Log.d("INFO", imageList.toString());
 					
 				}
