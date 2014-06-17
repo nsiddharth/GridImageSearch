@@ -14,6 +14,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -21,15 +23,12 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
-import android.widget.ImageView;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.image.SmartImageView;
 
-public class SearchActivity extends Activity {
-
-	
+public class SearchActivity extends Activity {	
 	
 	private EditText etSearch;
 	private GridView gvImages;
@@ -37,6 +36,18 @@ public class SearchActivity extends Activity {
 	ArrayList<ImageResult> imageList;
 	ImageResultArrayAdapter imageAdapter ;
 
+	UserPreference userPref;
+	String imgtype="";
+	String as_sitesearch="";
+	String imgcolor="";
+	String imgsz="";
+	int requestCode = 200;
+	
+
+	private static final String USER_PREFERENCE = "user_preference";
+
+	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -90,7 +101,19 @@ public class SearchActivity extends Activity {
 String searchTerm = etSearch.getText().toString();
 		
 		AsyncHttpClient client = new AsyncHttpClient();
-		client.get("https://ajax.googleapis.com/ajax/services/search/images?rsz=8&"+ "start="+ (page*8) +"&v=1.0&q=" + Uri.encode(searchTerm), 
+		StringBuilder url =  new StringBuilder();
+		url.append("https://ajax.googleapis.com/ajax/services/search/images?rsz=8&start=" + (page*8) + "&v=1.0&q=" + Uri.encode(searchTerm));
+		if(imgtype.length()>0)
+			url.append("&imgtype=" + imgtype);
+		if(as_sitesearch.length()>0)
+			url.append("&as_sitesearch="+ as_sitesearch);
+		if(imgcolor.length()>0)
+			url.append("&imgcolor="+ imgcolor);
+		if(imgsz.length()>0)
+			url.append("&imgsz="+ imgsz);
+		
+		
+		client.get(url.toString(), 
 				new JsonHttpResponseHandler(){
 			
 			
@@ -153,4 +176,44 @@ String searchTerm = etSearch.getText().toString();
         imageDialog.create();
         imageDialog.show();     
     }
+	
+	
+	
+	@Override
+	 public boolean onCreateOptionsMenu(Menu menu) {
+      // Inflate the menu; this adds items to the action bar if it is present.
+      getMenuInflater().inflate(R.layout.menu_preferences, menu);
+      return true;
+  }
+
+
+	public void onPreferences(MenuItem mi){
+		//Toast.makeText(this, "Preferences!", Toast.LENGTH_SHORT).show();
+		Intent intent = new Intent(this, PreferencesActivity.class);
+		//get User Preferences
+
+		startActivityForResult(intent, requestCode);
+
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		//Toast.makeText(getApplicationContext(), "GotActivityResult", Toast.LENGTH_LONG).show();
+		if (resultCode == RESULT_OK && requestCode == 200) {
+			userPref = (UserPreference)data.getSerializableExtra(USER_PREFERENCE);
+			if(userPref !=null){
+				imgtype = userPref.getType();
+				as_sitesearch = userPref.getSiteFilter();
+				imgcolor = userPref.getColorFilter();
+				imgsz = userPref.getSize();
+				//Toast.makeText(getApplicationContext(), imgsz, Toast.LENGTH_LONG).show();
+			}
+
+		}
+
+
+
+	}
+	
+	
 }
