@@ -1,0 +1,23 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_root" 
+    android:orientation="horizontal"
+    android:layout_width="fill_parent" 
+    android:layout_height="fill_parent"
+    android:padding="10dp">
+   <com.loopj.android.image.SmartImageView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/ivResult2"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:maxWidth="600dp">
+    
+
+	</com.loopj.android.image.SmartImageView>
+    
+
+    <TextView android:id="@+id/custom_fullimage_placename"
+        android:layout_width="wrap_content" 
+        android:layout_height="fill_parent"
+        android:textColor="#FFF">
+    </TextView>
+    
+</LinearLayout>

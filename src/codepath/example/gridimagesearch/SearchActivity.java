@@ -7,19 +7,25 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ImageView;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.image.SmartImageView;
 
 public class SearchActivity extends Activity {
 
@@ -45,10 +51,11 @@ public class SearchActivity extends Activity {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				// TODO Auto-generated method stub
-				Intent i = new Intent(getApplicationContext(),ImageDisplayActivity.class);
+				//Intent i = new Intent(getApplicationContext(),ImageDisplayActivity.class);
 				ImageResult imageResult = imageList.get(position);
-				i.putExtra("result", imageResult);
-				startActivity(i);
+				loadPhoto(view, 100, 100, imageResult);
+				//i.putExtra("result", imageResult);
+				//startActivity(i);
 			}
 		});
 		
@@ -113,6 +120,37 @@ String searchTerm = etSearch.getText().toString();
 			
 			
 		});
+				
+		
 		
 	}
+	
+	
+	
+	private void loadPhoto(View view, int width, int height, ImageResult imageResult) {
+
+		
+
+
+        AlertDialog.Builder imageDialog = new AlertDialog.Builder(this);
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
+
+        View layout = inflater.inflate(R.layout.custom_image_dialog,
+                (ViewGroup) findViewById(R.id.layout_root));
+        SmartImageView image = (SmartImageView) layout.findViewById(R.id.ivResult2);
+        image.setImageUrl(imageResult.getFullUrl());
+        image.setImageDrawable(image.getDrawable());
+        imageDialog.setView(layout);
+        imageDialog.setPositiveButton("OK", new DialogInterface.OnClickListener(){
+
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+
+        });
+
+
+        imageDialog.create();
+        imageDialog.show();     
+    }
 }
